@@ -2,7 +2,7 @@
 {
     public class Task : IBehaviour
     {
-        public Constants.Action _action;
+        protected Constants.Action _action;
 
         public Task( Constants.Action action )
         {
@@ -12,6 +12,11 @@
         public virtual void SetAction( Constants.Action action )
         {
             _action = action;
+        }
+
+        public virtual bool Run()
+        {
+            return _action();
         }
     }
 }

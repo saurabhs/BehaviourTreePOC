@@ -4,55 +4,58 @@ namespace BehaviourTreePOC
 {
     public class Root : IBehaviour
     {
-        public List<Node> nodes = null;
-        public Node currentNode = null;
+        protected List<Node> _nodes = null;
+        protected Node _currentNode = null;
+        protected int _index = 0;
 
         public Root()
         {
+            _nodes = new List<Node>();
         }
 
         ~Root()
         {
+            if ( _nodes != null )
+            {
+                _nodes.Clear();
+                _nodes = null;
+            }
+
+            _currentNode = null;
         }
 
         public void Setup()
         {
-            currentNode = nodes?[0] ?? null;
+            _currentNode = _nodes?[0] ?? null;
         }
 
         public void UpdateCurrentNode( Node node )
         {
-            currentNode = node;
+            _currentNode = node;
         }
 
         public void AddNode( Node node )
         {
-            if ( nodes == null )
-                nodes = new List<Node>();
-
-            if ( nodes.Contains( node ) )
+            if ( _nodes.Contains( node ) )
                 return;
 
-            nodes.Add( node );
+            _nodes.Add( node );
         }
 
         public void RemoveNode( Node node )
         {
-            if ( nodes == null )
-                return;
-
-            nodes.Remove( node );
+            _nodes.Remove( node );
         }
 
-        public void Run()
+        public bool Run()
         {
-            currentNode?.Run();
+            if ( !_currentNode.Run() )
+            {
+                if ( ++_index >= _nodes.Count ) _index = 0;
+                _currentNode = _nodes[_index];
+            }
 
-            //int index = 0;
-            //while ( index < nodes.Count )
-            //{
-            //    nodes[index].Run();
-            //}
+            return true;
         }
     }
 }

@@ -1,52 +1,53 @@
-﻿using System.Collections.Generic;
-
-namespace BehaviourTreePOC
+﻿namespace BehaviourTreePOC
 {
     public abstract class Node : IBehaviour
     {
-        public List<Task> _tasks = null;
-        public IBehaviour parent = null;
+        protected System.Collections.Generic.List<IBehaviour> _behaviour = null;
+        protected IBehaviour _parent = null;
+        protected IBehaviour _currentNode = null;
+
+        public IBehaviour Parent { get { return _parent; } }
 
         public Node( IBehaviour parent )
         {
-            this.parent = parent;
+            _parent = parent;
         }
 
         ~Node()
         {
-            if ( _tasks != null )
+            if ( _behaviour != null )
             {
-                _tasks.Clear();
-                _tasks = null;
+                _behaviour.Clear();
+                _behaviour = null;
             }
 
-            parent = null;
+            _parent = null;
         }
 
         public virtual void SetParent( IBehaviour parent )
         {
-            this.parent = parent;
+            _parent = parent;
         }
 
-        public virtual void AddAction( Task task )
+        public virtual void AddAction( IBehaviour task )
         {
-            if ( _tasks == null )
-                _tasks = new List<Task>();
+            if ( _behaviour == null )
+                _behaviour = new System.Collections.Generic.List<IBehaviour>();
 
-            if ( _tasks.Contains( task ) )
+            if ( _behaviour.Contains( task ) )
                 return;
 
-            _tasks.Add( task );
+            _behaviour.Add( task );
         }
 
-        public virtual void RemoveAction( Task task )
+        public virtual void RemoveAction( IBehaviour task )
         {
-            if ( _tasks == null )
+            if ( _behaviour == null )
                 return;
 
-            _tasks.Remove( task );
+            _behaviour.Remove( task );
         }
 
-        public abstract void Run();
+        public abstract bool Run();
     }
 }

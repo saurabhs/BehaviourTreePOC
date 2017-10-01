@@ -2,6 +2,6 @@
 {
     public interface IBehaviour
     {
-
+        bool Run();
     }
 }

@@ -2,22 +2,22 @@
 {
     public class Sequence : Node
     {
-        //public List<Task> _tasks
-        //public IBehaviour parent
-
         public Sequence( IBehaviour parent ) : base( parent )
         {
+            _behaviour = new System.Collections.Generic.List<IBehaviour>();
         }
 
-        public override void Run()
+        public override bool Run()
         {
-            foreach ( var task in _tasks )
+            foreach ( var task in _behaviour )
             {
-                if ( !task._action.Invoke() )
+                if ( !task.Run() )
                 {
-                    break;
+                    return false;
                 }
             }
+
+            return true;
         }
     }
 }
