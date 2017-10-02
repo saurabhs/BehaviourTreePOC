@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        Setup2();
+        Setup();
     }
 
     private void Setup()
@@ -19,14 +19,15 @@ public class GameController : MonoBehaviour
         seq.AddAction( new Task( Task1 ) );
         seq.AddAction( new Task( Task2 ) );
         seq.AddAction( new Task( Task3 ) );
+        seq.Setup();
 
         var sel = new Selector( root );
         sel.AddAction( new Task( Task4 ) );
         sel.AddAction( new Task( Task5 ) );
+        seq.Setup();
 
         root.AddNode( seq );
         root.AddNode( sel );
-
         root.Setup();
     }
 
@@ -41,7 +42,7 @@ public class GameController : MonoBehaviour
         seq.AddAction( new Task( Task2 ) );
         seq.AddAction( new Task( Task3 ) );
 
-        var sel = new Selector( rootSelector );
+        var sel = new Sequence( rootSelector );
         sel.AddAction( new Task( Task4 ) );
         sel.AddAction( new Task( Task5 ) );
 

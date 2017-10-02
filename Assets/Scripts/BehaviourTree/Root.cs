@@ -8,6 +8,8 @@ namespace BehaviourTreePOC
         protected Node _currentNode = null;
         protected int _index = 0;
 
+        protected Node CurrentNode { get { return _currentNode; } set { _currentNode = value; } }
+
         public Root()
         {
             _nodes = new List<Node>();
@@ -29,17 +31,12 @@ namespace BehaviourTreePOC
             _currentNode = _nodes?[0] ?? null;
         }
 
-        public void UpdateCurrentNode( Node node )
-        {
-            _currentNode = node;
-        }
-
         public void AddNode( Node node )
         {
-            if ( _nodes.Contains( node ) )
-                return;
-
-            _nodes.Add( node );
+            if ( !_nodes.Contains( node ) )
+            {
+                _nodes.Add( node );
+            }
         }
 
         public void RemoveNode( Node node )
@@ -51,7 +48,9 @@ namespace BehaviourTreePOC
         {
             if ( !_currentNode.Run() )
             {
-                if ( ++_index >= _nodes.Count ) _index = 0;
+                if ( ++_index >= _nodes.Count )
+                    _index = 0;
+
                 _currentNode = _nodes[_index];
             }
 

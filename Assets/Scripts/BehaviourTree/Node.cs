@@ -1,53 +1,61 @@
-﻿namespace BehaviourTreePOC
+﻿using System.Collections.Generic;
+
+namespace BehaviourTreePOC
 {
     public abstract class Node : IBehaviour
     {
-        protected System.Collections.Generic.List<IBehaviour> _behaviour = null;
         protected IBehaviour _parent = null;
-        protected IBehaviour _currentNode = null;
 
-        public IBehaviour Parent { get { return _parent; } }
+        protected List<IBehaviour> _actions = null;
+        protected IBehaviour _currentAction = null;
+
+        protected int _index = 0;
+
+        public IBehaviour Parent { get { return _parent; } /*set { _parent = value; }*/ }
 
         public Node( IBehaviour parent )
         {
+            _actions = new List<IBehaviour>();
             _parent = parent;
+            _index = 0;
         }
 
         ~Node()
         {
-            if ( _behaviour != null )
+            if ( _actions != null )
             {
-                _behaviour.Clear();
-                _behaviour = null;
+                _actions.Clear();
+                _actions = null;
             }
 
+            _currentAction = null;
             _parent = null;
         }
 
-        public virtual void SetParent( IBehaviour parent )
-        {
-            _parent = parent;
-        }
-
-        public virtual void AddAction( IBehaviour task )
-        {
-            if ( _behaviour == null )
-                _behaviour = new System.Collections.Generic.List<IBehaviour>();
-
-            if ( _behaviour.Contains( task ) )
-                return;
-
-            _behaviour.Add( task );
-        }
-
-        public virtual void RemoveAction( IBehaviour task )
-        {
-            if ( _behaviour == null )
-                return;
-
-            _behaviour.Remove( task );
-        }
-
         public abstract bool Run();
+
+        public virtual void AddAction( IBehaviour action )
+        {
+            if ( !_actions.Contains( action ) )
+            {
+                _actions.Add( action );
+            }
+        }
+
+        public virtual void RemoveAction( IBehaviour action )
+        {
+            if ( _actions != null )
+            {
+                _actions.Remove( action );
+            }
+        }
+
+        public virtual void Setup()
+        {
+            if ( _actions == null || _actions.Count == 0 )
+                return;
+
+            _currentAction = _actions[0];
+        }
     }
 }
